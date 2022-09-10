@@ -1,0 +1,34 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Excuteing Installing Phase
+      - |
+        npm install -g eslint
+        npm install eslint
+        npm install eslint-config-airbnb
+        npm install eslint-config-airbnb-base
+        npm install eslint-plugin-import
+
+      - echo $CODEBUILD_SRC_DIR  
+      - echo $CODEBUILD_SRC_DIR_s3_config_files
+
+      - cd $CODEBUILD_SRC_DIR_s3_config_files
+      - ls -al
+      - cp .eslintrc.js $CODEBUILD_SRC_DIR/.eslintrc.js
+      - cd $CODEBUILD_SRC_DIR
+      - ls -al
+  pre_build:
+    commands:
+      - echo Excuteing pre Build Phase
+      - cd $CODEBUILD_SRC_DIR
+      - eslint --ext .js .
+    finally:
+      - echo eslint has done     
+  #build:
+  #  commands:
+  #    - echo Excuteing  Build Phase
+  #post_build:
+  #  commands:
+  #    - echo Excuteing post Build Phase

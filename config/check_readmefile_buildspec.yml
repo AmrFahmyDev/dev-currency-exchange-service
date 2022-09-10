@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Excuteing Installing Phase
+  pre_build:
+    commands:
+      - echo Excuteing pre Build Phase
+      - cd $CODEBUILD_SRC_DIR
+      - echo Checking Readme File
+      - |
+        if testFile=$(test -e ./README.md); then
+        echo $testFile
+        echo README.md file is exists;
+        else 
+        echo README.md file not exists !;
+        exit 1; 
+        fi        
+      - grep 'Environments' README.md; echo $?
+      - grep 'Project Installing' README.md; echo $?
+  #build:
+  #  commands:
+  #    - echo Excuteing  Build Phase
+  #post_build:
+  #  commands:
+  #    - echo Excuteing post Build Phase

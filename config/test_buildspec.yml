@@ -1,0 +1,32 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Excuteing Installing Phase
+      - npm install -g jest
+      - cd $CODEBUILD_SRC_DIR_s3_tests
+      - ls -al
+      - cp sum.test.js $CODEBUILD_SRC_DIR/tests/sum.test.js
+      - cd $CODEBUILD_SRC_DIR
+      - ls -al
+  pre_build:
+    commands:
+      - echo Excuteing pre Build Phase
+      - cd $CODEBUILD_SRC_DIR
+      - npm install --save-dev jest-junit
+      - echo Run Test
+      - jest
+reports:
+  jest_reports:
+    files:
+      - 'junit.xml'
+    file-format: JUNITXML
+    base-directory: '.'
+  # build:    
+  #   commands:
+  #     - echo build reports
+  #post_build:
+  #  commands:
+  #    - echo Excuteing post Build Phase
+  

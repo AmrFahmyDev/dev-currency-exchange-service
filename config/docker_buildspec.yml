@@ -1,0 +1,29 @@
+version: 0.2
+
+env:
+  shell: bash
+  variables:
+    Tag: "latest"
+phases:
+  pre_build:
+    commands:      
+      - echo Logging in to Amazon ECR...
+      - docker login --username amrfahmydev --password bf6937ca-60f1-4d89-8898-a5d71e2dae46
+      - |
+        for d in */ ; do
+        echo "$d"
+        nodeVer=$d
+        done
+      - echo "nodeVer is:" $nodeVer
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - echo "Tag-nodeVer is :" $(Tag)-$(nodeVer)
+      - docker build -t dev-cicd:$(Tag)-$(nodeVer) .
+      - docker tag dev-cicd:$(Tag)-$(nodeVer) amrfahmydev/dev-cicd:$(Tag)-$(nodeVer)
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...      
+      - docker push amrfahmydev/dev-cicd:`Tag`-`nodeVer`
