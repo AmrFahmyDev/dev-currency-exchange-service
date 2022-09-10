@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const redis = require('ioredis');
 const request = require('request');
+const initJaegerTracer = require("jaeger-client").initTracer;
 const redisConfig = require('./db/redisConfig.js').redisConfig;
 const socketStore = new redis(redisConfig.port, redisConfig.host, redisConfig.redisOptions);
 
