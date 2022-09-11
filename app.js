@@ -64,8 +64,8 @@ app.get('/health', (req, res) => {
   res.send('healthy');
 });
 
-app.listen(3000, () => {
-  console.log('App listening on port 3000!');
+app.listen(8080, () => {
+  console.log('App listening on port 8080!');
 });
 
 function getExchangeRate(res, currency) {
