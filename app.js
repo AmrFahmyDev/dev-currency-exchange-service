@@ -1,12 +1,7 @@
-// const express = require('express');
-// const bodyParser = require('body-parser');
-const Pino = require("pino");
-const logger = Pino();
-const Fastify = require("fastify");
-const server = Fastify({ logger });
+const express = require('express');
+const bodyParser = require('body-parser');
 const redis = require('ioredis');
 const request = require('request');
-
 const redisConfig = require('./db/redisConfig.js').redisConfig;
 const socketStore = new redis(redisConfig.port, redisConfig.host, redisConfig.redisOptions);
 
@@ -17,14 +12,14 @@ const socketStore = new redis(redisConfig.port, redisConfig.host, redisConfig.re
 // const TableName = 'currencies';
 
 
-// const app = express();
-// app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(bodyParser.json());
+const app = express();
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 const dbConnection = require('./db/dbConnection');
 dbConnection.connect(); //.then(startApp)
 
-server.get('/', (req, res) => {
+app.get('/', (req, res) => {
   console.log('req.query:', req.query);
   var currency = req.query.currency;
   if (!currency) {
@@ -34,7 +29,7 @@ server.get('/', (req, res) => {
   return getExchangeRate(res, currency);
 });
 
-server.post('/', (req, res) => {
+app.post('/', (req, res) => {
   console.log('req.body:', req.body);
   let currency = req.body.currency;
   let mailAddress = req.body.mailAddress;
@@ -64,12 +59,12 @@ console.log('options:',options);
   });
 });
 
-server.get('/health', (req, res) => {
+app.get('/health', (req, res) => {
   res.status(200);
   res.send('healthy');
 });
 
-server.listen(3000, "0.0.0.0", () => {
+app.listen(3000, () => {
   console.log('App listening on port 3000!');
 });
 
