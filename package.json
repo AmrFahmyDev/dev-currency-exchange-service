@@ -13,9 +13,7 @@
 	"dependencies": {
 		"express": "^4.17.1",
 		"ioredis": "4.19.2",
-		"jaeger-client": "^3.19.0",
 		"mongodb": "3.6.6",
-		"opentracing": "^0.14.7",
 		"request": "^2.88.2"
 	}
 }
