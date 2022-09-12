@@ -65,8 +65,8 @@ app.get('/health', (req, res) => {
   res.send('healthy');
 });
 
-app.listen(5050, () => {
-  console.log('App listening on port 5050!');
+app.listen(8080, () => {
+  console.log('App listening on port 8080!');
 });
 
 function getExchangeRate(res, currency) {
@@ -88,7 +88,7 @@ function getExchangeRate(res, currency) {
 
 async function getCurrencyPrice(res, currency) {
   console.log('>>>>>>getCurrencyPrice');
-  
+
   const currencyCollection = dbConnection.getCurrencyCollection();
   let result = await currencyCollection.findOne({ currency: currency });
 
