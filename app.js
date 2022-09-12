@@ -20,6 +20,7 @@ const dbConnection = require('./db/dbConnection');
 dbConnection.connect(); //.then(startApp)
 
 app.get('/', (req, res) => {
+  console.log('GET Request');
   console.log('req.query:', req.query);
   var currency = req.query.currency;
   if (!currency) {
@@ -64,11 +65,12 @@ app.get('/health', (req, res) => {
   res.send('healthy');
 });
 
-app.listen(8080, () => {
-  console.log('App listening on port 8080!');
+app.listen(5050, () => {
+  console.log('App listening on port 5050!');
 });
 
 function getExchangeRate(res, currency) {
+  console.log('>>>>>>getExchangeRate');
   let exchangeRateKey = currency + '_key';
 
   socketStore.get(exchangeRateKey, function (getKeyErr, exchangeRateKeyCached) {
@@ -85,6 +87,8 @@ function getExchangeRate(res, currency) {
 }
 
 async function getCurrencyPrice(res, currency) {
+  console.log('>>>>>>getCurrencyPrice');
+  
   const currencyCollection = dbConnection.getCurrencyCollection();
   let result = await currencyCollection.findOne({ currency: currency });
 
