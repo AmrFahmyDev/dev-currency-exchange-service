@@ -31,20 +31,14 @@ const kafka = new Kafka({
 });
 const producer = kafka.producer()
 const consumer = kafka.consumer({ groupId: 'group1' })
-// const run = async () => {
-//   await producer.connect();
 
-//   // Consuming
-//   await consumer.connect()
-//   // await consumer.subscribe({ topic: 'Order.events', fromBeginning: true });
-// }
-const run = async () => {
+const run = async (mailAddress) => {
   // Producing
   await producer.connect()
   await producer.send({
     topic: 'send-email',
     messages: [
-      { value: 'Hello KafkaJS user!' },
+      { mailAddress: mailAddress },
     ],
   });
 
@@ -57,14 +51,11 @@ const run = async () => {
       console.log({
         partition,
         offset: message.offset,
-        value: message.value.toString(),
+        value: message.mailAddress.toString(),
       })
     },
   })
 }
-
-run().catch(console.error);
-
 
 app.get('/', (req, res) => {
   console.log('GET Request');
@@ -99,12 +90,13 @@ app.post('/', (req, res) => {
     body: 'mailAddress=' + mailAddress
   }
   console.log('options:', options);
+  run(mailAddress).catch(console.error);
 
-  request(options, function (err, response, body) {
-    console.log('mail service err:', err);
-    console.log('mail service body:', body);
-    return getExchangeRate(res, currency);
-  });
+  // request(options, function (err, response, body) {
+  //   console.log('mail service err:', err);
+  //   console.log('mail service body:', body);
+  //   return getExchangeRate(res, currency);
+  // });
 });
 
 app.get('/health', (req, res) => {
