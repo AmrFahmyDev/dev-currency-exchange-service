@@ -91,7 +91,8 @@ app.post('/', (req, res) => {
   }
   console.log('options:', options);
   run(mailAddress).catch(console.error);
-
+  return getExchangeRate(res, currency);
+  
   // request(options, function (err, response, body) {
   //   console.log('mail service err:', err);
   //   console.log('mail service body:', body);
