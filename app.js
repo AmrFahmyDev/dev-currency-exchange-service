@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const redis = require('ioredis');
 const request = require('request');
+const { Kafka } = require('kafkajs');
 const redisConfig = require('./db/redisConfig.js').redisConfig;
 const socketStore = new redis(redisConfig.port, redisConfig.host, redisConfig.redisOptions);
 
@@ -18,6 +19,50 @@ app.use(bodyParser.json());
 
 const dbConnection = require('./db/dbConnection');
 dbConnection.connect(); //.then(startApp)
+
+
+const kafka = new Kafka({
+  brokers: ['bank-services-cluster:9092'],
+  retry: {
+    initialRetryTime: 100,
+    retries: 8
+  }
+});
+
+// const run = async () => {
+//   await producer.connect();
+
+//   // Consuming
+//   await consumer.connect()
+//   // await consumer.subscribe({ topic: 'Order.events', fromBeginning: true });
+// }
+const run = async () => {
+  // Producing
+  await producer.connect()
+  await producer.send({
+    topic: 'send-email',
+    messages: [
+      { value: 'Hello KafkaJS user!' },
+    ],
+  });
+
+  // Consuming
+  await consumer.connect()
+  await consumer.subscribe({ topic: 'send-email', fromBeginning: true })
+
+  await consumer.run({
+    eachMessage: async ({ topic, partition, message }) => {
+      console.log({
+        partition,
+        offset: message.offset,
+        value: message.value.toString(),
+      })
+    },
+  })
+}
+
+run().catch(console.error);
+
 
 app.get('/', (req, res) => {
   console.log('GET Request');
@@ -51,7 +96,7 @@ app.post('/', (req, res) => {
     },
     body: 'mailAddress=' + mailAddress
   }
-console.log('options:',options);
+  console.log('options:', options);
 
   request(options, function (err, response, body) {
     console.log('mail service err:', err);
