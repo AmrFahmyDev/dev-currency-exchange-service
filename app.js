@@ -20,6 +20,8 @@ app.use(bodyParser.json());
 const dbConnection = require('./db/dbConnection');
 dbConnection.connect(); //.then(startApp)
 
+const producer = kafka.producer()
+const consumer = kafka.consumer({ groupId: 'group1' })
 
 const kafka = new Kafka({
   brokers: ['bank-services-cluster:9092'],
