@@ -23,7 +23,7 @@ dbConnection.connect(); //.then(startApp)
 
 
 const kafka = new Kafka({
-  brokers: ['bank-services-cluster:9092'],
+  brokers: ['bank-services-cluster-kafka-bootstrap.bank-services.svc:9092'],
   retry: {
     initialRetryTime: 100,
     retries: 8
