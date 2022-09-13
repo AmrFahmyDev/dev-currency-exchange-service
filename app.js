@@ -38,7 +38,7 @@ const run = async (mailAddress) => {
   await producer.send({
     topic: 'send-email',
     messages: [
-      { mailAddress: mailAddress },
+      { value: mailAddress },
     ],
   });
 
