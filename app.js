@@ -4,7 +4,7 @@ const redis = require('ioredis');
 const request = require('request');
 const { Kafka } = require('kafkajs');
 // const redisConfig = require('./db/redisConfig.js').redisConfig;
-const socketStore = new redis(redisConfig.port, redisConfig.host, redisConfig.redisOptions);
+// const socketStore = new redis(redisConfig.port, redisConfig.host, redisConfig.redisOptions);
 
 // const AWS = require("aws-sdk");
 // AWS.config.update({ region: 'eu-west-1' });
