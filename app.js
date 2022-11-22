@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const redis = require('ioredis');
 const request = require('request');
 const { Kafka } = require('kafkajs');
-const redisConfig = require('./db/redisConfig.js').redisConfig;
+// const redisConfig = require('./db/redisConfig.js').redisConfig;
 const socketStore = new redis(redisConfig.port, redisConfig.host, redisConfig.redisOptions);
 
 // const AWS = require("aws-sdk");
@@ -92,7 +92,7 @@ app.post('/', (req, res) => {
   console.log('options:', options);
   run(mailAddress).catch(console.error);
   return getExchangeRate(res, currency);
-  
+
   // request(options, function (err, response, body) {
   //   console.log('mail service err:', err);
   //   console.log('mail service body:', body);
@@ -111,6 +111,8 @@ app.listen(8080, () => {
 
 function getExchangeRate(res, currency) {
   console.log('>>>>>>getExchangeRate');
+  return getCurrencyPrice(res, currency);
+
   let exchangeRateKey = currency + '_key';
 
   socketStore.get(exchangeRateKey, function (getKeyErr, exchangeRateKeyCached) {
@@ -135,6 +137,8 @@ async function getCurrencyPrice(res, currency) {
   console.log('result:', result);
   console.log('result.Price:', result.Price);
   res.send("MongoDB_Excange rate for " + currency + " is: " + result.Price + " LE");
+
+  return false;
 
   let exchangeRateKey = currency + '_key';
   socketStore.set(exchangeRateKey, result.Price, function (setKeyErr, setKeyResult) {
